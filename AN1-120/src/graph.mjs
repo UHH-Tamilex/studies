@@ -65,7 +65,7 @@ const go = (data, inflate = 1.2, clustercolour = '#beaed4') => {
         numIter: 4000,
         quality: 'proof',
         packComponents: true,
-        idealEdgeLength: edge => edge.data('length') * 100,
+        idealEdgeLength: edge => (1 - edge.data('length')) * 100,
         //edgeElasticity: edge => 50 / edge.data('length')
     });
     layout1.run();
