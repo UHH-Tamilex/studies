@@ -5,7 +5,7 @@ Cytoscape.use(Fcose);
 const cytoStyle =  [{
     selector: 'node',
     style: {
-        'background-color': '#666',
+        'background-color': '#7fc97f',
         'label': 'data(id)',
         'width': 10,
         'height': 10,
@@ -14,12 +14,10 @@ const cytoStyle =  [{
 },
 {selector: 'edge',
 style: {
-    //width: 1,
-    width: el => el.data('dice') < 0.2 ? 2 : 1,
-    //width: el => 1 + 1/el.data('dice'),
+    width: el => { return Math.log(1 + el.data('length')) + 1;},
     'line-color': '#ccc',
     //'line-opacity': el => { const scaled = (1-el.data('dice'))*2; return scaled > 1 ? 1 : scaled; },
-    'line-opacity': el => (1 - el.data('length')) * 0.8,
+    'line-opacity': el => { const scaled = Math.log(1.2 + el.data('length')); return scaled > 1 ? 1 : scaled; },
     'z-index': 1,
     'events': 'no'
 }
@@ -28,24 +26,20 @@ style: {
 style: {
     'line-color': 'rgb(7,48,80)',
     'z-index': 10,
-    //'line-opacity': 1
+    //'line-opacity': 0.8
     }
 },
-{selector: 'node',
-style: {
-    'background-color': '#2b653c'
-    }
-},
-{selector: ':parent',
-style: {
-    'background-opacity': 0.333,
-    'shape': 'round-rectangle',
-    'label': '',
-    'border-width': 0
-    }
-}
 ];
-const go = (data, inflate = 1.2) => {
+const go = (data, inflate = 1.2, clustercolour = '#beaed4') => {
+    cytoStyle.push({selector: ':parent',
+        style: {
+            'background-opacity': 0.333,
+            'background-color': clustercolour,
+            'shape': 'round-rectangle',
+            'label': '',
+            'border-width': 0
+            }
+        });
     const cy = Cytoscape({
         container: document.getElementById('graph'),
         elements: data,
